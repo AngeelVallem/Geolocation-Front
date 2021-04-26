@@ -56,7 +56,8 @@
     "react-flatpickr": "3.9.1",
     "react-hook-form": "6.15.1",
     "react-intl": "3.11.0",
-    "react-leaflet": "3.1.0",
+    "react-leaflet": "^3.1.0",
+    "react-leaflet-draw": "^0.19.7",
     "react-paginate": "7.0.0",
     "react-perfect-scrollbar": "1.5.5",
     "react-player": "2.6.2",
@@ -97,14 +98,8 @@
     "lint": "eslint src/**/*.js src/**/*.jsx",
     "lint:fix": "eslint src/**/*.js --fix"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "devDependencies": {
     "@types/sortablejs": "^1.10.6",
-    "eslint": "^7.8.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-react": "^7.20.6",
     "node-sass": "^4.13.1",
     "react-app-rewire-aliases": "^0.2.0",
     "react-app-rewire-postcss": "^3.0.2",

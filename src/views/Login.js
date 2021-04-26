@@ -28,7 +28,7 @@ const Login = () => {
     <div className='auth-wrapper auth-v2'>
       <Row className='auth-inner m-0'>
         <Link className='brand-logo' to='/'>
-        <img className="" src={LOGO} alt="logo"/>
+        <img className="logo_img" src={LOGO} alt="logo"/>
         </Link>
         <Col className='d-none d-lg-flex align-items-center p-5' lg='8' sm='12'>
           <div className='w-100 d-lg-flex align-items-center justify-content-center px-5'>
@@ -56,7 +56,7 @@ const Login = () => {
                 </div>
                 <InputPasswordToggle className='input-group-merge' />
               </FormGroup>
-              <FormGroup>
+             <FormGroup>
                 <CustomInput type='checkbox' className='custom-control-Primary' id='remember-me' label='Remember Me' />
               </FormGroup>
               <Button color="primary" block>

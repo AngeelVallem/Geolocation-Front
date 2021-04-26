@@ -1,12 +1,8 @@
-import { Card, CardHeader, CardBody, CardTitle, CardText, CardLink } from 'reactstrap'
+import DataTableCustom from '../components/dataTable'
 
 const Alerts = () => {
   return (
-    <div>
-      <Card>
-      <h1>alerts</h1>
-      </Card>
-    </div>
+    <DataTableCustom/>
   )
 }
 
