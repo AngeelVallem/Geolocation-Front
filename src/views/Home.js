@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div>
       <Card>
-
+        <h1>map iframe</h1>
       </Card>
     </div>
   )

@@ -40,5 +40,5 @@ export default [
     title: 'Configuración',
     icon: <Settings size={20} />,
     navLink: '/settings'
-  } 
+  }
 ]

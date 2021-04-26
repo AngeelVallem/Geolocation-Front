@@ -13,6 +13,9 @@ import { Row, Col,
     Button } 
     from 'reactstrap'
 import '@styles/base/pages/page-auth.scss'
+
+import '../assets/scss/style.scss'
+
 import LOGO from '../assets/images/logo/bigFleet-logo.png'
 
 const Login = () => {
@@ -25,7 +28,7 @@ const Login = () => {
     <div className='auth-wrapper auth-v2'>
       <Row className='auth-inner m-0'>
         <Link className='brand-logo' to='/'>
-        <img src={LOGO} alt="logo"/>
+        <img className="" src={LOGO} alt="logo"/>
         </Link>
         <Col className='d-none d-lg-flex align-items-center p-5' lg='8' sm='12'>
           <div className='w-100 d-lg-flex align-items-center justify-content-center px-5'>
@@ -43,25 +46,22 @@ const Login = () => {
                 <Label className='form-label' for='login-email'>
                   Email
                 </Label>
-                <Input type='email' id='login-email' placeholder='john@example.com' autoFocus />
+                <Input type='email' id='login-email' placeholder='mail@example.com' autoFocus />
               </FormGroup>
               <FormGroup>
                 <div className='d-flex justify-content-between'>
                   <Label className='form-label' for='login-password'>
                     Password
                   </Label>
-                  <Link to='/'>
-                    <small>Forgot Password?</small>
-                  </Link>
                 </div>
-                <InputPasswordToggle className='input-group-merge' id='login-password' />
+                <InputPasswordToggle className='input-group-merge' />
               </FormGroup>
               <FormGroup>
                 <CustomInput type='checkbox' className='custom-control-Primary' id='remember-me' label='Remember Me' />
               </FormGroup>
-              <Button.Ripple tag={Link} to='/' color="primary" block>
+              <Button color="primary" block>
                 Login
-              </Button.Ripple>
+              </Button>
             </Form>
           </Col>
         </Col>

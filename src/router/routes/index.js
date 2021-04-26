@@ -13,8 +13,24 @@ const Routes = [
     component: lazy(() => import('../../views/Home'))
   },
   {
-    path: '/second-page',
-    component: lazy(() => import('../../views/SecondPage'))
+    path: '/mapPath',
+    component: lazy(() => import('../../views/MapPath'))
+  },
+  {
+    path: '/metrics',
+    component: lazy(() => import('../../views/Metrics'))
+  },
+  {
+    path: '/alerts',
+    component: lazy(() => import('../../views/Alerts'))
+  },
+  {
+    path: '/geocaching',
+    component: lazy(() => import('../../views/Geocaching'))
+  },
+  {
+    path: '/settings',
+    component: lazy(() => import('../../views/Settings'))
   },
   {
     path: '/login',
