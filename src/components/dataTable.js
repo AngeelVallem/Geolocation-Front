@@ -1,4 +1,6 @@
-import React from "react"
+import React, { useState } from 'react'
+import axios from 'axios'
+
 import {
   Card,
   CardBody,
@@ -6,355 +8,134 @@ import {
   CardTitle,
   Badge,
   Input,
-  Button
+  Button,
+  Media,
+  CustomInput,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+  UncontrolledDropdown,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  UncontrolledTooltip
 } from "reactstrap"
 import DataTable from "react-data-table-component"
-import { Star, Search } from "react-feather"
+import {
+  Eye,
+  TrendingUp,
+  Send,
+  MoreVertical,
+  Download,
+  Edit,
+  Trash,
+  Copy,
+  CheckCircle,
+  Check,
+  Save,
+  ArrowDownCircle,
+  Info,
+  PieChart,
+  ToggleLeft
+} from "react-feather"
+import Avatar from '@components/avatar'
+import { Link } from 'react-router-dom'
 
 class DataTableCustom extends React.Component {
+
+  componentDidMount() {
+    const accessToken = localStorage.getItem('accessToken')
+    axios.get(`http://localhost:3000/geofences?token=${accessToken}`).then((response) => {
+      console.log(response.data)
+      this.setState({ data: response.data })
+    })
+  }
+
+  toggleModal = id => {
+    this.setState({modal:!this.state.modal})
+  }
+
+  deactivate() {
+    alert()
+  }
+
   state = {
     columns: [
       {
-        name: "Name",
+        name: "Nombre",
         selector: "name",
         sortable: true,
         minWidth: "200px",
         cell: row => (
           <div className="d-flex flex-xl-row flex-column align-items-xl-center align-items-start py-xl-0 py-1">
             <div className="user-img ml-xl-0 ml-2">
-              <img
-                className="img-fluid rounded-circle"
-                height="36"
-                width="36"
-                src={row.image}
-                alt={row.name}
-              />
-            </div>
-            <div className="user-info text-truncate ml-xl-50 ml-0">
-              <span
-                title={row.name}
-                className="d-block text-bold-500 text-truncate mb-0">
-                {row.name}
-              </span>
-              <small title={row.email}>{row.email}</small>
+              <div className="user-info text-truncate ml-xl-50 ml-0">
+                <small title={row.name}>{row.name}</small>
+              </div>
             </div>
           </div>
         )
       },
       {
-        name: "Date Created",
-        selector: "date",
+        name: "Descripcion",
+        selector: "desc",
+        sortable: true,
+        cell: row => <p className="text-bold-500 mb-0">{row.shape.type}</p>
+      },
+      {
+        name: "Activo",
+        selector: "active",
         sortable: true,
         cell: row => (
-          <p className="text-bold-500 text-truncate mb-0">{row.date}</p>
+          <span>
+            <Avatar content={<Check />} color="light-success" />
+          </span>
         )
       },
       {
-        name: "Status",
-        selector: "status",
+        name: 'Action',
+        minWidth: '110px',
+        selector: '',
         sortable: true,
         cell: row => (
-          <Badge
-            color={row.status === "inactive" ? "light-danger" : "light-success"}
-            pill>
-            {row.status}
-          </Badge>
+          <div className='column-action d-flex align-items-center'>
+            <Link to={`/apps/invoice/preview/${row.id}`} id={`pw-tooltip-${row.id}`}>
+              <Eye size={17} className='mx-1' />
+            </Link>
+            <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+              Preview
+            </UncontrolledTooltip>
+            <UncontrolledDropdown>
+              <DropdownToggle tag='span'>
+                <MoreVertical size={17} className='cursor-pointer' />
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem onClick={e => this.deactivate()}>
+                  <ToggleLeft size={14} className='mr-50' />
+                  <span className='align-middle'>Desactivar</span>
+                </DropdownItem>
+                <DropdownItem tag={Link} to={`/apps/invoice/edit/${row.id}`} className='w-100'>
+                  <Edit size={14} className='mr-50' />
+                  <span className='align-middle'>Edit</span>
+                </DropdownItem>
+                <DropdownItem
+                  className='w-100'
+                  onClick={() => { this.toggleModal() }}
+                >
+                  <Trash size={14} className='mr-50' />
+                  <span className='align-middle'>Delete</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </div>
         )
-      },
-      {
-        name: "Revenue",
-        selector: "revenue",
-        sortable: true,
-        cell: row => <p className="text-bold-500 mb-0">{row.revenue}</p>
-      },
-      {
-        name: "Feedback",
-        selector: "",
-        sortable: true,
-        cell: row => {
-          return (
-            <div className="d-flex flex-column align-items-center">
-              <ul className="list-inline mb-0">
-                <li className="list-inline-item">
-                  <Star size="20" className="text-warning" />
-                </li>
-                <li className="list-inline-item">
-                  <Star size="20" className="text-warning" />
-                </li>
-                <li className="list-inline-item">
-                  <Star
-                    size="20"
-                    className={
-                      row.ratings === "good" || row.ratings === "average" ? "text-warning" : "text-muted"
-                    }
-                  />
-                </li>
-                <li className="list-inline-item">
-                  <Star
-                    size="20"
-                    className={
-                      row.ratings === "good" ? "text-warning" : "text-muted"
-                    }
-                  />
-                </li>
-                <li className="list-inline-item">
-                  <Star
-                    size="20"
-                    className={
-                      row.ratings === "good" ? "text-warning" : "text-muted"
-                    }
-                  />
-                </li>
-              </ul>
-            </div>
-          )
-        }
       }
     ],
-    data: [
-      {
-        name: "angel Lillecrop",
-        email: "alillecrop0@twitpic.com",
-        date: "May 13, 2018",
-        status: "active",
-        revenue: "$32,000",
-        ratings: "good"
-      },
-      {
-        name: "Shep Pentlow",
-        email: "spentlow1@home.pl",
-        date: "June 5, 2019",
-        status: "active",
-        revenue: "$50,000",
-        ratings: "good"
-      },
-      {
-        name: "Gasper Morley",
-        email: "gmorley2@chronoengine.com",
-        date: "December 24, 2019",
-        status: "active",
-        revenue: "$78,000",
-        ratings: "average"
-      },
-      {
-        name: "Phaedra Jerrard",
-        email: "pjerrard3@blogs.com",
-        date: "November 30, 2018",
-        status: "inactive",
-        revenue: "$10,000",
-        ratings: "bad"
-      },
-      {
-        name: "Conn Plose",
-        email: "cplose4@geocities.com",
-        date: "April 8, 2017",
-        status: "active",
-        revenue: "$22,000",
-        ratings: "average"
-      },
-      {
-        name: "Tootsie Brandsma",
-        email: "tbrandsma5@theatlantic.com",
-        date: "August 12, 2019",
-        status: "inactive",
-        revenue: "$49,000",
-        ratings: "bad"
-      },
-      {
-        name: "Sibley Bum",
-        email: "sbum6@sourceforge.net",
-        date: "October 1, 2017",
-        status: "active",
-        revenue: "$56,000",
-        ratings: "good"
-      },
-      {
-        name: "Kristoffer Thew",
-        email: "kthew7@amazon.com",
-        date: "February 28, 2018",
-        status: "inactive",
-        revenue: "$83,000",
-        ratings: "bad"
-      },
-      {
-        name: "Fay Hasard",
-        email: "fhasard8@java.com",
-        date: "January 29, 2018",
-        status: "active",
-        revenue: "$26,000",
-        ratings: "good"
-      },
-      {
-        name: "Tabby Abercrombie",
-        email: "tabercrombie9@statcounter.com",
-        date: "April 1, 2019",
-        status: "active",
-        revenue: "$60,000",
-        ratings: "average"
-      },
-      {
-        name: "Stella Indruch",
-        email: "sindruch1@mayoclinic.com",
-        date: "Dec 4, 2019",
-        status: "active",
-        revenue: "$21,000",
-        ratings: "good"
-      },
-      {
-        name: "Aron McNirlin",
-        email: "amcnirlin2@samsung.com",
-        date: "Jan 4, 2018",
-        status: "inactive",
-        revenue: "$30,000",
-        ratings: "bad"
-      },
-      {
-        name: "Ange Trenholm",
-        email: "atrenholm4@slideshare.net",
-        date: "February 23, 2019",
-        status: "active",
-        revenue: "$12,000",
-        ratings: "good"
-      },
-      {
-        name: "Caterina Starkie",
-        email: "cstarkie5@feedburner.com",
-        date: "September 8, 2018",
-        status: "active",
-        revenue: "$40,000",
-        ratings: "average"
-      },
-      {
-        name: "Hugibert McGeagh",
-        email: "hmcgeaghf@smh.com.au",
-        date: "August 20, 2017",
-        status: "active",
-        revenue: "$90,000",
-        ratings: "good"
-      },
-      {
-        name: "Jaime Maher",
-        email: "jmaher1@msu.edu",
-        date: "April 7, 2019",
-        status: "active",
-        revenue: "$38,000",
-        ratings: "good"
-      },
-      {
-        name: "Amalle Pladen",
-        email: "jmaher1@msu.edu",
-        date: "March 30, 2018",
-        status: "active",
-        revenue: "$18,000",
-        ratings: "average"
-      },
-      {
-        name: "Dorris Ferries",
-        email: "dferries7@ucoz.com",
-        date: "August 25, 2017",
-        status: "active",
-        revenue: "$69,000",
-        ratings: "bad"
-      },
-      {
-        name: "Andy Fettes",
-        email: "afettesh@upenn.edu",
-        date: "September 30, 2017",
-        status: "inactive",
-        revenue: "$35,000",
-        ratings: "good"
-      },
-      {
-        name: "Allene Hughf",
-        email: "ahughf0@dropbox.com",
-        date: "June 21, 2018",
-        status: "active",
-        revenue: "$35,000",
-        ratings: "good"
-      },
-      {
-        name: "Petra Rheubottom",
-        email: "prheubottom0@globo.com",
-        date: "July 4, 2018",
-        status: "active",
-        revenue: "$72,000",
-        ratings: "good"
-      },
-      {
-        name: "Ambrosius Olyfant",
-        email: "aolyfant1@timesonline.co.uk",
-        date: "May 5, 2019",
-        status: "inactive",
-        revenue: "$13,000",
-        ratings: "bad"
-      },
-      {
-        name: "Letti Trineman",
-        email: "ltrineman2@cnbc.com",
-        date: "February 15, 2017",
-        status: "active",
-        revenue: "$84,000",
-        ratings: "average"
-      },
-      {
-        name: "Sayer Rodger",
-        email: "srodgerb@rakuten.co.jp",
-        date: "January 30, 2018",
-        status: "inactive",
-        revenue: "$15,000",
-        ratings: "bad"
-      },
-      {
-        name: "Skyler Scotcher",
-        email: "sscotcher3@soup.io",
-        date: "November 3, 2018",
-        status: "active",
-        revenue: "$26,000",
-        ratings: "average"
-      },
-      {
-        name: "Florette Shotbolt",
-        email: "fshotbolt7@wiley.com",
-        date: "March 12, 2017",
-        status: "active",
-        revenue: "$69,000",
-        ratings: "good"
-      },
-      {
-        name: "Janis Bakhrushkin",
-        email: "jbakhrushkina@epa.gov",
-        date: "July 10, 2017",
-        status: "active",
-        revenue: "$65,000",
-        ratings: "good"
-      },
-      {
-        name: "Alric Peinton",
-        email: "apeinton0@google.cn",
-        date: "February 6, 2017",
-        status: "inactive",
-        revenue: "$38,000",
-        ratings: "bad"
-      },
-      {
-        name: "Rubie Pitkethly",
-        email: "rpitkethlyf@51.la",
-        date: "February 20, 2018",
-        status: "active",
-        revenue: "$62,000",
-        ratings: "average"
-      },
-      {
-        name: "Hortensia Soaper",
-        email: "hsoaperh@mapy.cz",
-        date: "June 1, 2017",
-        status: "active",
-        revenue: "$60,000",
-        ratings: "good"
-      }
-    ],
+    data: [],
     filteredData: [],
-    value: ""
+    value: "",
+    modal: false
   }
 
   handleFilter = e => {
@@ -371,7 +152,7 @@ class DataTableCustom extends React.Component {
           item.email.toLowerCase().startsWith(value.toLowerCase()) ||
           item.revenue.toLowerCase().startsWith(value.toLowerCase()) ||
           item.status.toLowerCase().startsWith(value.toLowerCase())
-        const  includesCondition =
+        const includesCondition =
           item.name.toLowerCase().includes(value.toLowerCase()) ||
           item.date.toLowerCase().includes(value.toLowerCase()) ||
           item.email.toLowerCase().includes(value.toLowerCase()) ||
@@ -389,16 +170,42 @@ class DataTableCustom extends React.Component {
   }
 
   render() {
-    const { data, columns, value, filteredData } = this.state
+    const { data, columns, value, filteredData, modal } = this.state
     return (
-          <DataTable
-            className="dataTable-custom"
-            data={value.length ? filteredData : data}
-            columns={columns}
-            noHeader
-            pagination
-            subHeader
-          />
+      <Card>
+        <CardHeader>
+          <CardTitle tag='h4'>Geocercas </CardTitle>
+        </CardHeader>
+        <DataTable
+          className="dataTable-custom"
+          data={value.length ? filteredData : data}
+          columns={columns}
+          noHeader
+          pagination
+          subHeader
+          highlightOnHover
+        />
+        <div className={`theme-modal-danger`} >
+          <Modal
+            isOpen={modal}
+            className='modal-dialog-centered'
+            modalClassName={'modal-danger'}
+          >
+            <ModalHeader>{'Warning'}</ModalHeader>
+            <ModalBody>
+              Estas seguro que deseas elimiar la geocerca seleccionada?.
+          </ModalBody>
+            <ModalFooter>
+              <Button color={"danger"} >
+                Accept
+              </Button>
+              <Button color={"neutral"} onClick={ () => { this.toggleModal() } }>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      </Card>
     )
   }
 }

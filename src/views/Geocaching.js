@@ -10,8 +10,12 @@ import {
   FormText
 } from "reactstrap"
 import DataTableCustom from "../components/dataTable"
-import DrawMap from '../components/DrawMap'
+
+import DrawMap from '../components/drawMap'
+import Select from "react-select"
+import Breadcrumbs from '@components/breadcrumbs'
 import FormGeocaching from '../components/Form'
+
 
 import "../assets/scss/style.css"
 
@@ -23,6 +27,7 @@ const Geocaching = () => {
   }
   return (
     <div className="d-flex flex-column">
+      <Breadcrumbs breadCrumbTitle='Geofences' breadCrumbParent2={false} breadCrumbParent3={false}/>
       {toggle === false ? (
         <div>
           <div className="d-flex justify-content-end mb-3">
