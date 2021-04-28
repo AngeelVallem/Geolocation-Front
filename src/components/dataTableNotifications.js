@@ -100,6 +100,10 @@ class DataTableCustom extends React.Component {
   render() {
     const { data, columns, value, filteredData } = this.state
     return (
+      <Card>
+      <CardHeader>
+        <CardTitle tag='h4'>Alertas </CardTitle>
+      </CardHeader>
           <DataTable
             className="dataTable-custom"
             data={value.length ? filteredData : data}
@@ -109,6 +113,7 @@ class DataTableCustom extends React.Component {
             subHeader
             highlightOnHover
           />
+          </Card>
     )
   }
 }

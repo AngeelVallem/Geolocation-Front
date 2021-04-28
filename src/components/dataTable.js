@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from 'react'
 import axios from 'axios'
 
 import {
@@ -15,10 +15,14 @@ import {
   DropdownItem,
   DropdownToggle,
   UncontrolledDropdown,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   UncontrolledTooltip
 } from "reactstrap"
 import DataTable from "react-data-table-component"
-import { 
+import {
   Eye,
   TrendingUp,
   Send,
@@ -32,19 +36,28 @@ import {
   Save,
   ArrowDownCircle,
   Info,
-  PieChart } from "react-feather"
+  PieChart,
+  ToggleLeft
+} from "react-feather"
 import Avatar from '@components/avatar'
 import { Link } from 'react-router-dom'
-
 
 class DataTableCustom extends React.Component {
 
   componentDidMount() {
-   const accessToken = localStorage.getItem('accessToken')
-   axios.get(`http://localhost:3000/geofences?token=${accessToken}`).then((response) => {
-    console.log(response.data)
-    this.setState({data:response.data})
-   })
+    const accessToken = localStorage.getItem('accessToken')
+    axios.get(`http://localhost:3000/geofences?token=${accessToken}`).then((response) => {
+      console.log(response.data)
+      this.setState({ data: response.data })
+    })
+  }
+
+  toggleModal = id => {
+    this.setState({modal:!this.state.modal})
+  }
+
+  deactivate() {
+    alert()
   }
 
   state = {
@@ -57,10 +70,10 @@ class DataTableCustom extends React.Component {
         cell: row => (
           <div className="d-flex flex-xl-row flex-column align-items-xl-center align-items-start py-xl-0 py-1">
             <div className="user-img ml-xl-0 ml-2">
-            <div className="user-info text-truncate ml-xl-50 ml-0">
-              <small title={row.name}>{row.name}</small>
+              <div className="user-info text-truncate ml-xl-50 ml-0">
+                <small title={row.name}>{row.name}</small>
+              </div>
             </div>
-          </div>
           </div>
         )
       },
@@ -76,9 +89,9 @@ class DataTableCustom extends React.Component {
         sortable: true,
         cell: row => (
           <span>
-            <Avatar content={<Check/>} color="light-success"/>
+            <Avatar content={<Check />} color="light-success" />
           </span>
-          )
+        )
       },
       {
         name: 'Action',
@@ -98,29 +111,20 @@ class DataTableCustom extends React.Component {
                 <MoreVertical size={17} className='cursor-pointer' />
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-                  <Download size={14} className='mr-50' />
-                  <span className='align-middle'>Download</span>
+                <DropdownItem onClick={e => this.deactivate()}>
+                  <ToggleLeft size={14} className='mr-50' />
+                  <span className='align-middle'>Desactivar</span>
                 </DropdownItem>
                 <DropdownItem tag={Link} to={`/apps/invoice/edit/${row.id}`} className='w-100'>
                   <Edit size={14} className='mr-50' />
                   <span className='align-middle'>Edit</span>
                 </DropdownItem>
                 <DropdownItem
-                  tag='a'
-                  href='/'
                   className='w-100'
-                  onClick={e => {
-                    e.preventDefault()
-                    store.dispatch(deleteInvoice(row.id))
-                  }}
+                  onClick={() => { this.toggleModal() }}
                 >
                   <Trash size={14} className='mr-50' />
                   <span className='align-middle'>Delete</span>
-                </DropdownItem>
-                <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-                  <Copy size={14} className='mr-50' />
-                  <span className='align-middle'>Duplicate</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -130,7 +134,8 @@ class DataTableCustom extends React.Component {
     ],
     data: [],
     filteredData: [],
-    value: ""
+    value: "",
+    modal: false
   }
 
   handleFilter = e => {
@@ -147,7 +152,7 @@ class DataTableCustom extends React.Component {
           item.email.toLowerCase().startsWith(value.toLowerCase()) ||
           item.revenue.toLowerCase().startsWith(value.toLowerCase()) ||
           item.status.toLowerCase().startsWith(value.toLowerCase())
-        const  includesCondition =
+        const includesCondition =
           item.name.toLowerCase().includes(value.toLowerCase()) ||
           item.date.toLowerCase().includes(value.toLowerCase()) ||
           item.email.toLowerCase().includes(value.toLowerCase()) ||
@@ -165,17 +170,42 @@ class DataTableCustom extends React.Component {
   }
 
   render() {
-    const { data, columns, value, filteredData } = this.state
+    const { data, columns, value, filteredData, modal } = this.state
     return (
-          <DataTable
-            className="dataTable-custom"
-            data={value.length ? filteredData : data}
-            columns={columns}
-            noHeader
-            pagination
-            subHeader
-            highlightOnHover
-          />
+      <Card>
+        <CardHeader>
+          <CardTitle tag='h4'>Geocercas </CardTitle>
+        </CardHeader>
+        <DataTable
+          className="dataTable-custom"
+          data={value.length ? filteredData : data}
+          columns={columns}
+          noHeader
+          pagination
+          subHeader
+          highlightOnHover
+        />
+        <div className={`theme-modal-danger`} >
+          <Modal
+            isOpen={modal}
+            className='modal-dialog-centered'
+            modalClassName={'modal-danger'}
+          >
+            <ModalHeader>{'Warning'}</ModalHeader>
+            <ModalBody>
+              Estas seguro que deseas elimiar la geocerca seleccionada?.
+          </ModalBody>
+            <ModalFooter>
+              <Button color={"danger"} >
+                Accept
+              </Button>
+              <Button color={"neutral"} onClick={ () => { this.toggleModal() } }>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      </Card>
     )
   }
 }

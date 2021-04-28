@@ -29,7 +29,7 @@ const ToastContent = ({ name, role }) => (
       </div>
     </div>
     <div className='toastify-body'>
-      <span>You have successfully logged in as an {role} user to Vuexy. Now you can start to explore. Enjoy!</span>
+      <span>You have successfully logged in as an {role} user. Now you can start to explore. Enjoy!</span>
     </div>
   </Fragment>
 )
@@ -72,7 +72,7 @@ const Login = () => {
                 localStorage.setItem('userData', JSON.stringify(userData))
                 history.push('/home')
                 toast.success(
-                  <ToastContent name={'John Doe'} role={'admin'} />,
+                  <ToastContent name={userData.name} role={'admin'} />,
                   { transition: Slide, hideProgressBar: true, autoClose: 2000 }
                 )
 
