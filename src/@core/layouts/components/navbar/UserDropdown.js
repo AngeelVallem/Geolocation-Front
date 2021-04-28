@@ -41,12 +41,12 @@ const UserDropdown = () => {
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
           <span className='user-name font-weight-bold'>{(userData && userData['username']) || 'John Doe'}</span>
-          <span className='user-status'>{(userData && userData.role) || 'Admin'}</span>
+          <span className='user-status'>{(userData && userData.company.name) || 'Admin'}</span>
         </div>
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem tag={Link} to='#' onClick={e => e.preventDefault()}>
+        {/* <DropdownItem tag={Link} to='#' onClick={e => e.preventDefault()}>
           <User size={14} className='mr-75' />
           <span className='align-middle'>Profile</span>
         </DropdownItem>
@@ -61,7 +61,7 @@ const UserDropdown = () => {
         <DropdownItem tag={Link} to='#' onClick={e => e.preventDefault()}>
           <MessageSquare size={14} className='mr-75' />
           <span className='align-middle'>Chats</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem tag={Link} to='/login' onClick={() => dispatch(handleLogout())}>
           <Power size={14} className='mr-75' />
           <span className='align-middle'>Logout</span>

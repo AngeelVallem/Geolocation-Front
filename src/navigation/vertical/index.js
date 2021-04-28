@@ -1,7 +1,9 @@
 import {MapPin, MessageSquare, CheckSquare,
-   Calendar,
+  Calendar,
   Grid,
-  Settings
+  Settings,
+  Octagon,
+  Bell
   } from 'react-feather'
 
 export default [
@@ -26,13 +28,13 @@ export default [
   {
     id: 'alerts',
     title: 'Alertas',
-    icon: <Calendar size={20} />,
+    icon: <Bell size={20} />,
     navLink: '/alerts'
   },
   {
     id: 'geocaching',
     title: 'Geocercas',
-    icon: <Grid size={20} />,
+    icon: <Octagon size={20} />,
     navLink: '/geocaching'
   },
   {

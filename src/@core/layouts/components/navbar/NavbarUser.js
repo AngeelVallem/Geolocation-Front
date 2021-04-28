@@ -2,6 +2,8 @@
 import { Fragment } from 'react'
 
 import UserDropdown from './UserDropdown'
+import NotificationDropdown from './NotificationDropdown'
+
 
 // ** Third Party Components
 import { Sun, Moon, Menu, Bell } from 'react-feather'
@@ -31,7 +33,7 @@ const NavbarUser = props => {
       </ul>
 
       <ul className='nav navbar-nav align-items-center ml-auto'>
-        <Bell/>
+        <NotificationDropdown/>
         <UserDropdown />
       </ul>
     </Fragment>
