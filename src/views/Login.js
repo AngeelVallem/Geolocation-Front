@@ -1,6 +1,9 @@
 import { useSkin } from '@hooks/useSkin'
-import { Link, Redirect } from 'react-router-dom'
-import { Facebook, Twitter, Mail, GitHub } from 'react-feather'
+import React, { useState, useRef, Fragment } from 'react'
+import Avatar from '@components/avatar'
+import { Link, Redirect, useHistory } from 'react-router-dom'
+import { toast, Slide } from 'react-toastify'
+import { Facebook, Twitter, Mail, GitHub, LogIn, Coffee } from 'react-feather'
 import InputPasswordToggle from '@components/input-password-toggle'
 import { Row, Col,
    CardTitle,
@@ -13,16 +16,80 @@ import { Row, Col,
     Button } 
     from 'reactstrap'
 import '@styles/base/pages/page-auth.scss'
-
+import useJwt from '../auth/jwt/useJwt'
 import '../assets/scss/style.scss'
-
 import LOGO from '../assets/images/logo/bigFleet-logo.png'
+
+const ToastContent = ({ name, role }) => (
+  <Fragment>
+    <div className='toastify-header'>
+      <div className='title-wrapper'>
+        <Avatar size='sm' color='success' icon={<Coffee size={12} />} />
+        <h6 className='toast-title font-weight-bold'>Welcome, {name}</h6>
+      </div>
+    </div>
+    <div className='toastify-body'>
+      <span>You have successfully logged in as an {role} user to Vuexy. Now you can start to explore. Enjoy!</span>
+    </div>
+  </Fragment>
+)
+
+const ErrorToastContent = ({ title, content }) => (
+  <Fragment>
+    <div className='toastify-header'>
+      <div className='title-wrapper'>
+        <Avatar size='sm' color='error' icon={<LogIn size={12} />} />
+        <h6 className='toast-title font-weight-bold'>{title}</h6>
+      </div>
+    </div>
+    <div className='toastify-body'>
+      <span>{content}</span>
+    </div>
+  </Fragment>
+)
 
 const Login = () => {
   const [skin, setSkin] = useSkin()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const loginForm = useRef(null)
+  const history = useHistory()
 
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
+    const login = (email, password) => {
+          useJwt.login({
+            email,
+            password
+          })
+            .then(response => {
+              if (response.status === 200) {
+                const { userData } = response.data
+                useJwt.setToken(response.data.accessToken)
+      
+                useJwt.setRefreshToken(response.data.refreshToken)
+      
+                localStorage.setItem('userData', JSON.stringify(userData))
+                history.push('/home')
+                toast.success(
+                  <ToastContent name={'John Doe'} role={'admin'} />,
+                  { transition: Slide, hideProgressBar: true, autoClose: 2000 }
+                )
+
+              } else {
+                toast.error(
+                  <ToastContent name={'John Doe'} role={'admin'} />,
+                  { transition: Slide, hideProgressBar: true, autoClose: 2000 }
+                )
+              }
+            })
+            .catch(error => {
+              toast.error(
+                <ErrorToastContent title={'Error de inicio de sesion'} content={'Las credenciales proporcionadas son incorrectas.'} />,
+                { transition: Slide, hideProgressBar: true, autoClose: 2000 }
+              )
+            })   
+    }
 
   return (
     <div className='auth-wrapper auth-v2'>
@@ -38,28 +105,28 @@ const Login = () => {
         <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
           <Col className='px-xl-2 mx-auto' sm='8' md='6' lg='12'>
             <CardTitle tag='h2' className='font-weight-bold mb-1'>
-              Welcome to Vuexy! 👋
+              Welcome to BigFleet! 👋
             </CardTitle>
             <CardText className='mb-2'>Please sign-in to your account and start the adventure</CardText>
-            <Form className='auth-login-form mt-2' onSubmit={e => e.preventDefault()}>
+            <Form ref={loginForm} className='auth-login-form mt-2' onSubmit={e => e.preventDefault()}>
               <FormGroup>
                 <Label className='form-label' for='login-email'>
-                  Email
+                  Email:
                 </Label>
-                <Input type='email' id='login-email' placeholder='mail@example.com' autoFocus />
+                <Input type='text' value={email} onChange={(e) => { setEmail(e.target.value) }} id='login-email' placeholder='Email' autoFocus />
               </FormGroup>
               <FormGroup>
                 <div className='d-flex justify-content-between'>
                   <Label className='form-label' for='login-password'>
-                    Password
+                    Password:
                   </Label>
                 </div>
-                <InputPasswordToggle className='input-group-merge' />
+                <InputPasswordToggle value={password} onChange={(e) => { setPassword(e.target.value) }} className='input-group-merge' />
               </FormGroup>
              <FormGroup>
                 <CustomInput type='checkbox' className='custom-control-Primary' id='remember-me' label='Remember Me' />
               </FormGroup>
-              <Button color="primary" block>
+              <Button color="primary" block onClick={() => { login(email, password) }}>
                 Login
               </Button>
             </Form>
