@@ -14,7 +14,21 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   height: 200px;
 }
 
+.formGeo {
+  padding-top: 2rem;
+  padding-right: 12rem;
+}
+
 .select-form {
   width: 8rem;
+}
+
+.leaflet-container {
+  width: 500px;
+  height: 500px;
+}
+
+.sr-only {
+  display: none;
 }
 /*# sourceMappingURL=style.css.map */
