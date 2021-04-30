@@ -11,10 +11,10 @@ import {
 } from "reactstrap"
 import DataTableCustom from "../components/dataTable"
 
-import DrawMap from '../components/drawMap'
+import DrawMap from '../components/DrawMap'
 import Select from "react-select"
 import Breadcrumbs from '@components/breadcrumbs'
-import FormGeocaching from '../components/Form'
+import FormGeocaching from '../components/FormGeo'
 
 
 import "../assets/scss/style.css"

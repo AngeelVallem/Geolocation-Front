@@ -1,8 +1,8 @@
 /*================================================================================
-	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-	Version: 2.0
-	Author: PIXINVENT
-	Author URL: http://www.themeforest.net/user/pixinvent
+Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+Version: 2.0
+Author: PIXINVENT
+Author URL: http://www.themeforest.net/user/pixinvent
 ================================================================================
 
 NOTE:
@@ -11,7 +11,6 @@ PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
 .logo-img {
   width: 200px;
-  height: 200px;
 }
 
 .formGeo {
@@ -30,5 +29,13 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 
 .sr-only {
   display: none;
+}
+
+.click {
+  cursor: pointer;
+}
+
+.fixed-input {
+  width: 20rem;
 }
 /*# sourceMappingURL=style.css.map */
